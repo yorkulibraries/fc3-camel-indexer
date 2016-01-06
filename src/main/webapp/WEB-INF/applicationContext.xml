@@ -114,13 +114,19 @@
         <setHeader headerName="FEDORASOAP">
           <simple>http://{{fcrepo.baseUrl}}{{fcrepo.basePath}}/services</simple>
         </setHeader>
-        <to uri="xslt:{{foxmlXslt.path}}?transformerFactoryClass=org.apache.xalan.processor.TransformerFactoryImpl"/>
-        <to uri="log:?logger=myLogger&amp;level=DEBUG"/>
-        <setHeader headerName="SolrOperation">
-            <constant>INSERT</constant>
-        </setHeader>
-        <to uri="solr://{{solr.baseUrl}}"/>
-        <log message="Added/Updated ${header.pid} to Solr" loggingLevel="INFO" loggerRef="myLogger"/>
+        <doTry>
+          <to uri="xslt:{{foxmlXslt.path}}?transformerFactoryClass=org.apache.xalan.processor.TransformerFactoryImpl"/>
+          <to uri="log:?logger=myLogger&amp;level=DEBUG"/>
+          <setHeader headerName="SolrOperation">
+              <constant>INSERT</constant>
+          </setHeader>
+          <to uri="solr://{{solr.baseUrl}}"/>
+          <log message="Added/Updated ${header.pid} to Solr" loggingLevel="INFO" loggerRef="myLogger"/>
+          <doCatch>
+            <exception>javax.xml.transform.TransformerException</exception>
+            <log message="XSLT error: ${exception.message}" loggingLevel="ERROR" loggerRef="myLogger"/>
+          </doCatch>
+        </doTry>
       </route>
   </camelContext>
  
