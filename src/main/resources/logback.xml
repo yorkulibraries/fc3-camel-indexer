@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
   <property name="INDEXER_LOG_PATH"
-            value="/var/log/tomcat/fedora3-camel-indexer${logfile.extension:-.log}"/>
+            value="/var/log/tomcat7/fedora3-camel-indexer${logfile.extension:-.log}"/>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
