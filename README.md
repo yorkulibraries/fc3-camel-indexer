@@ -20,6 +20,7 @@ Uses several overridable java options.
 * fedora3.indexer.jmsBroker - The JMS Broker (default: tcp://localhost:61616)
 * fedora3.indexer.jmsQueue - The JMS queue to watch (default: queue:fedora.apim.update)
 * fedora3.indexer.xslt - The location of the XSLT to apply (default: classpath://test.xslt)
+* fedora3.indexer.concurrent - Number of concurrent processes to perform on Solr insert/delete routes (default: 5)
 
 You will almost certainly need to override the ```fedora3.indexer.xslt``` option.
 
