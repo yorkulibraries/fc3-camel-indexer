@@ -87,14 +87,20 @@
      <route id="solr-deletion">
         <description>Solr Deletion</description>
         <from uri="seda:solr.delete?blockWhenFull=true&amp;concurrentConsumers={{concurrent.processes}}"/>
-        <setHeader headerName="SolrOperation">
+        <doTry>
+          <setHeader headerName="SolrOperation">
             <constant>DELETE_BY_ID</constant>
-        </setHeader>
-        <setBody>
+          </setHeader>
+          <setBody>
             <simple>${header.pid}</simple>
-        </setBody>
-        <to uri="solr://{{solr.baseUrl}}"/>
-        <log message="Removed ${header.pid} from Solr" loggingLevel="INFO" loggerRef="myLogger"/>
+          </setBody>
+          <to uri="solr://{{solr.baseUrl}}"/>
+          <log message="Removed ${header.pid} from Solr" loggingLevel="INFO" loggerRef="myLogger"/>
+          <doCatch>
+            <exception>org.apache.solr.common.SolrException</exception>
+            <log message="Solr error on ${header.pid}: ${exception.message}" loggingLevel="ERROR" loggerRef="myLogger"/>
+          </doCatch>
+        </doTry>
       </route>
  
       <route id="solr-insertion">
